@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from users.models import User
 
@@ -26,7 +27,11 @@ class Habbit(models.Model):
     )
     periodicity_days = models.IntegerField(
         help_text='Периодичность привычки в днях',
-        default=1
+        default=1,
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(7)
+        ]
     )
     reward_text = models.CharField(
         max_length=150,
@@ -35,7 +40,11 @@ class Habbit(models.Model):
         null=True
     )
     duration_seconds = models.IntegerField(
-        help_text='Укажите продолжительность выполнения привычки',
+        help_text='Укажите продолжительность выполнения привычки (в секундах, максимум 120)',
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(120)
+        ]
     )
     is_public = models.BooleanField(
         default=False,
@@ -47,6 +56,16 @@ class Habbit(models.Model):
         to=User,
         on_delete=models.CASCADE
     )
+
+    def clean(self):
+        # Проверяем, что только одно из полей related_habit или reward_text заполнено
+        if self.related_habit and self.reward_text:
+            raise ValidationError("Нельзя указать одновременно связанную привычку и награду.")
+        if not self.related_habit and not self.reward_text:
+            raise ValidationError("Необходимо указать либо связанную привычку, либо награду.")
+
+        # Вызов родительского метода clean для других валидаций
+        super().clean()
 
     class Meta:
         verbose_name = 'Привычка'
