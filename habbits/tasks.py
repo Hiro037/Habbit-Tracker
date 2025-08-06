@@ -22,7 +22,7 @@ def send_notices():
     for habit in habits:
         # Проверяем, подходит ли текущий день с учетом периодичности
         created_at = habit.created_at
-        days_since_creation = (now - created_at).days
+        days_since_creation = (now.date() - created_at.date()).days
         if days_since_creation % habit.periodicity_days == 0:
             chat_id = habit.user.telegram_id
             message = f"Просили напомнить о привычке {habit.action} в {habit.place}."

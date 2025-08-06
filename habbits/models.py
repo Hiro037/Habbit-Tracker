@@ -3,7 +3,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from users.models import User
 
-
 class Habbit(models.Model):
     place = models.CharField(
         max_length=150, help_text="Введите место для выполнения привычки"
@@ -48,7 +47,6 @@ class Habbit(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
 
     def clean(self):
-        # Проверяем, что только одно из полей related_habit или reward_text заполнено
         if self.related_habit and self.reward_text:
             raise ValidationError(
                 "Нельзя указать одновременно связанную привычку и награду."
@@ -57,10 +55,9 @@ class Habbit(models.Model):
             raise ValidationError(
                 "Необходимо указать либо связанную привычку, либо награду."
             )
-
-        # Вызов родительского метода clean для других валидаций
         super().clean()
 
     class Meta:
         verbose_name = "Привычка"
         verbose_name_plural = "Привычки"
+        ordering = ['id']
