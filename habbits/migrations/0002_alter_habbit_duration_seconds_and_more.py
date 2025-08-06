@@ -7,18 +7,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('habbits', '0001_initial'),
+        ("habbits", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='habbit',
-            name='duration_seconds',
-            field=models.IntegerField(help_text='Укажите продолжительность выполнения привычки (в секундах, максимум 120)', validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(120)]),
+            model_name="habbit",
+            name="duration_seconds",
+            field=models.IntegerField(
+                help_text="Укажите продолжительность выполнения привычки (в секундах, максимум 120)",
+                validators=[
+                    django.core.validators.MinValueValidator(1),
+                    django.core.validators.MaxValueValidator(120),
+                ],
+            ),
         ),
         migrations.AlterField(
-            model_name='habbit',
-            name='periodicity_days',
-            field=models.IntegerField(default=1, help_text='Периодичность привычки в днях', validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(7)]),
+            model_name="habbit",
+            name="periodicity_days",
+            field=models.IntegerField(
+                default=1,
+                help_text="Периодичность привычки в днях",
+                validators=[
+                    django.core.validators.MinValueValidator(1),
+                    django.core.validators.MaxValueValidator(7),
+                ],
+            ),
         ),
     ]

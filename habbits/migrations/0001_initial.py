@@ -15,25 +15,94 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Habbit',
+            name="Habbit",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('place', models.CharField(help_text='Введите место для выполнения привычки', max_length=150)),
-                ('time', models.DateTimeField(help_text='Введите время и дату выполнения привычки')),
-                ('action', models.CharField(help_text='Введите действие, которое представляет собой привычка', max_length=200)),
-                ('is_rewarding', models.BooleanField(default=False, help_text='Укажите, если это приятная привычка')),
-                ('periodicity_days', models.IntegerField(default=1, help_text='Периодичность привычки в днях')),
-                ('reward_text', models.CharField(blank=True, help_text='Укажите награду после выполнения привычки', max_length=150, null=True)),
-                ('duration_seconds', models.IntegerField(help_text='Укажите продолжительность выполнения привычки')),
-                ('is_public', models.BooleanField(default=False, help_text='Укажите, если хотите сделать привычку общедоступной')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('related_habit', models.ForeignKey(blank=True, help_text='Укажите привычку, связанную с новой привычкой', null=True, on_delete=django.db.models.deletion.SET_NULL, to='habbits.habbit')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "place",
+                    models.CharField(
+                        help_text="Введите место для выполнения привычки",
+                        max_length=150,
+                    ),
+                ),
+                (
+                    "time",
+                    models.DateTimeField(
+                        help_text="Введите время и дату выполнения привычки"
+                    ),
+                ),
+                (
+                    "action",
+                    models.CharField(
+                        help_text="Введите действие, которое представляет собой привычка",
+                        max_length=200,
+                    ),
+                ),
+                (
+                    "is_rewarding",
+                    models.BooleanField(
+                        default=False, help_text="Укажите, если это приятная привычка"
+                    ),
+                ),
+                (
+                    "periodicity_days",
+                    models.IntegerField(
+                        default=1, help_text="Периодичность привычки в днях"
+                    ),
+                ),
+                (
+                    "reward_text",
+                    models.CharField(
+                        blank=True,
+                        help_text="Укажите награду после выполнения привычки",
+                        max_length=150,
+                        null=True,
+                    ),
+                ),
+                (
+                    "duration_seconds",
+                    models.IntegerField(
+                        help_text="Укажите продолжительность выполнения привычки"
+                    ),
+                ),
+                (
+                    "is_public",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Укажите, если хотите сделать привычку общедоступной",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "related_habit",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="Укажите привычку, связанную с новой привычкой",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="habbits.habbit",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Привычка',
-                'verbose_name_plural': 'Привычки',
+                "verbose_name": "Привычка",
+                "verbose_name_plural": "Привычки",
             },
         ),
     ]

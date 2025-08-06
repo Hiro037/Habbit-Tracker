@@ -5,3 +5,5 @@ DATABASE_USER=yourdatabaseuser
 DATABASE_PASSWORD=yourdatabasepassword
 DATABASE_HOST=yourdatabasehost
 DATABASE_PORT=yourdatabaseport
+
+TELEGRAM_BOT_TOKEN=ypurtelegrambottoken

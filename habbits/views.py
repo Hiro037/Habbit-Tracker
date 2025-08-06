@@ -14,6 +14,7 @@ from users.permissions import IsOwner
 class PublicHabbitListAPIView(ListAPIView):
     queryset = Habbit.objects.filter(is_public=True)
 
+
 class HabbitViewSet(ModelViewSet):
     queryset = Habbit.objects.all()
     pagination_class = StandardResultsSetPagination
