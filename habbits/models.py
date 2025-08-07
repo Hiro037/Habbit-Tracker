@@ -47,14 +47,28 @@ class Habbit(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
 
     def clean(self):
+        errors = {}
+
+        # 1. Нельзя одновременно указывать связанную привычку и награду
         if self.related_habit and self.reward_text:
-            raise ValidationError(
-                "Нельзя указать одновременно связанную привычку и награду."
-            )
-        if not self.related_habit and not self.reward_text:
-            raise ValidationError(
-                "Необходимо указать либо связанную привычку, либо награду."
-            )
+            errors['related_habit'] = "Нельзя указать одновременно связанную привычку и награду."
+            errors['reward_text'] = "Нельзя указать одновременно награду и связанную привычку."
+
+        # 2. Необходимо указать либо связанную привычку, либо награду (если привычка не является приятной)
+        if not self.is_rewarding and not self.related_habit and not self.reward_text:
+            errors['reward_text'] = "Необходимо указать либо связанную привычку, либо награду."
+
+        # 3. Связанная привычка должна быть приятной
+        if self.related_habit and not self.related_habit.is_rewarding:
+            errors['related_habit'] = "Связанная привычка должна быть приятной (is_rewarding=True)."
+
+        # 4. Для приятной привычки нельзя указывать награду и связанную привычку
+        if self.is_rewarding and (self.reward_text or self.related_habit):
+            errors['is_rewarding'] = "Для приятной привычки нельзя указывать награду или связанную привычку."
+
+        if errors:
+            raise ValidationError(errors)
+
         super().clean()
 
     class Meta:
