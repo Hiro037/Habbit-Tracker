@@ -187,4 +187,5 @@ CACHES = {
     }
 }
 
+# Настройки для отправки сообщений черезе телеграм бота
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
