@@ -3,6 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from users.models import User
 
+
 class Habbit(models.Model):
     place = models.CharField(
         max_length=150, help_text="Введите место для выполнения привычки"
@@ -51,20 +52,30 @@ class Habbit(models.Model):
 
         # 1. Нельзя одновременно указывать связанную привычку и награду
         if self.related_habit and self.reward_text:
-            errors['related_habit'] = "Нельзя указать одновременно связанную привычку и награду."
-            errors['reward_text'] = "Нельзя указать одновременно награду и связанную привычку."
+            errors["related_habit"] = (
+                "Нельзя указать одновременно связанную привычку и награду."
+            )
+            errors["reward_text"] = (
+                "Нельзя указать одновременно награду и связанную привычку."
+            )
 
         # 2. Необходимо указать либо связанную привычку, либо награду (если привычка не является приятной)
         if not self.is_rewarding and not self.related_habit and not self.reward_text:
-            errors['reward_text'] = "Необходимо указать либо связанную привычку, либо награду."
+            errors["reward_text"] = (
+                "Необходимо указать либо связанную привычку, либо награду."
+            )
 
         # 3. Связанная привычка должна быть приятной
         if self.related_habit and not self.related_habit.is_rewarding:
-            errors['related_habit'] = "Связанная привычка должна быть приятной (is_rewarding=True)."
+            errors["related_habit"] = (
+                "Связанная привычка должна быть приятной (is_rewarding=True)."
+            )
 
         # 4. Для приятной привычки нельзя указывать награду и связанную привычку
         if self.is_rewarding and (self.reward_text or self.related_habit):
-            errors['is_rewarding'] = "Для приятной привычки нельзя указывать награду или связанную привычку."
+            errors["is_rewarding"] = (
+                "Для приятной привычки нельзя указывать награду или связанную привычку."
+            )
 
         if errors:
             raise ValidationError(errors)
@@ -74,4 +85,4 @@ class Habbit(models.Model):
     class Meta:
         verbose_name = "Привычка"
         verbose_name_plural = "Привычки"
-        ordering = ['id']
+        ordering = ["id"]

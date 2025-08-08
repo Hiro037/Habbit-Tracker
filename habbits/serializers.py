@@ -7,4 +7,4 @@ class HabbitSerializer(ModelSerializer):
     class Meta:
         model = Habbit
         fields = "__all__"
-        read_only_fields = ['user']
+        read_only_fields = ["user"]

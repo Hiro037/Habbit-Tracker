@@ -1,7 +1,7 @@
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Habbit
 from .paginators import StandardResultsSetPagination
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.viewsets import ModelViewSet
 from .serializers import HabbitSerializer
 from users.permissions import IsOwner
@@ -14,7 +14,13 @@ from rest_framework import status
 
 @method_decorator(cache_page(60 * 5), name="dispatch")
 class PublicHabbitListAPIView(ListAPIView):
-    queryset = Habbit.objects.filter(is_public=True).order_by('id')
+    queryset = Habbit.objects.filter(is_public=True).order_by("id")
+    serializer_class = HabbitSerializer
+    permission_classes = [AllowAny]
+
+@method_decorator(cache_page(60 * 5), name="dispatch")
+class PublicHabbitDetailAPIView(RetrieveAPIView):
+    queryset = Habbit.objects.filter(is_public=True)
     serializer_class = HabbitSerializer
     permission_classes = [AllowAny]
 
@@ -30,20 +36,11 @@ class HabbitViewSet(ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    def get_object(self):
+        obj = super().get_object()
+        if obj.user != self.request.user:
+            self.permission_denied(self.request, message="Habit not found")
+        return obj
+
     def get_permissions(self):
-        if self.action == 'retrieve':
-            return [IsAuthenticated()]
         return [IsAuthenticated(), IsOwner()]
-
-    def retrieve(self, request, *args, **kwargs):
-        # Получаем объект (не только среди объектов текущего пользователя!)
-        obj = get_object_or_404(Habbit, pk=kwargs['pk'])
-
-        if obj.is_public:
-            # Публичный — любой авторизованный может получить доступ
-            return Response(self.get_serializer(obj).data)
-        else:
-            # Не публичный — проверяем, является ли пользователь владельцем
-            if obj.user != request.user:
-                return Response({'detail': 'Недостаточно прав.'}, status=status.HTTP_403_FORBIDDEN)
-            return Response(self.get_serializer(obj).data)

@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission
 
+
 class IsOwner(BasePermission):
     message = "Только владелец может управлять этим объектом."
 
