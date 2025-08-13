@@ -11,7 +11,7 @@ router.register(r"", HabbitViewSet, basename="habbit")
 app_name = HabbitsConfig.name
 
 urlpatterns = [
-    path('', include(router.urls)),
     path('public/', PublicHabbitListAPIView.as_view(), name='public-habbits-list'),
     path('public/<int:pk>/', PublicHabbitDetailAPIView.as_view(), name='public-habbit-detail'),
+    path('', include(router.urls)),
 ]
